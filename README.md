@@ -17,6 +17,31 @@ Crearemos un archivo ```dockerfile```:
 - Modificamos el archivo ```index``` para que sea ```index.php```.
 - El puerto de escucha es el **80**.
 
+```
+FROM ubuntu:focal
+
+LABEL title="apache-lamp" \
+  author="Jacobo Azmani"
+
+ENV DEBIAN_FRONTEND=noninteractive 
+ENV TZ=Europe/Madrid
+
+RUN apt-get update \
+    && apt-get install -y apache2 \
+    && apt-get install -y php \
+    && apt-get install -y libapache2-mod-php \
+    && apt-get install -y php-mysql
+
+RUN apt install git -y \
+    && cd /tmp \
+    && git clone https://github.com/josejuansanchez/iaw-practica-lamp \
+    && mv /tmp/iaw-practica-lamp/src/* /var/www/html/ \
+    && sed -i 's/localhost/mysql/' /var/www/html/config.php \
+    && rm /var/www/html/index.html
+
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"] 
+```
+
 ### Creación de ```docker-compose.yml```
 Utilizaremos la última versión de **MySQL** disponible. Es muy **importante** que para configurar la contraseña de **MySQL** usemos ```--default-authentication-plugin=mysql_native_password```.
 
@@ -28,8 +53,63 @@ Importaremos un script con la base de datos, para ello añadimos un volumen llam
 ```
 
 Crearemos un archivo **.env** para guardar nuestras variables de entorno.
+- El archivo final de ````docker-compose.yml``` quedaría así:
+```
+version: '3.8'
+
+services:
+
+    mysql:
+        image: mysql
+        command: --default-authentication-plugin=mysql_native_password
+        ports:
+            - 3306:3306
+        environment:
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        volumes:
+            - mysql_data:/var/lib/mysql
+            - ./sql:/docker-entrypoint-initdb.d
+        networks:
+            - backend-network
+        restart: always
+    
+    phpmyadmin:
+        image: phpmyadmin
+        environment:
+            - PMA_ARBITRARY=1
+        ports:
+            - 8080:80
+        networks:
+            - frontend-network
+            - backend-network
+        depends_on: 
+            - mysql
+        restart: always
+
+    apache:
+        build: ./apache
+        ports:
+            - 80:80
+        networks:
+            - frontend-network
+            - backend-network
+        depends_on: 
+            - mysql
+        restart: always
+
+networks:
+    frontend-network:
+    backend-network:
+
+volumes:
+    mysql_data:
+```
 
 ## REFERENCIAS
 - [José Juan Sanchez](https://josejuansanchez.org/iaw/practica-16/index.html)
 - [Pila LAMP](https://github.com/josejuansanchez/iaw-practica-lamp)
 - [Dockerfile](https://docs.docker.com/engine/reference/builder/)
+- [Docker-compose version](https://docs.docker.com/compose/compose-file/compose-versioning/)
