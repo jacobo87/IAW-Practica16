@@ -53,7 +53,7 @@ Importaremos un script con la base de datos, para ello añadimos un volumen llam
 ```
 
 Crearemos un archivo **.env** para guardar nuestras variables de entorno.
-- El archivo final de ````docker-compose.yml``` quedaría así:
+- El archivo final de ```docker-compose.yml``` quedaría así:
 
 ```
 version: '3.8'
