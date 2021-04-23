@@ -22,11 +22,9 @@ Utilizaremos la última versión de **MySQL** disponible. Es muy **importante** 
 
 Importaremos un script con la base de datos, para ello añadimos un volumen llamado ```./sql:/docker-entrypoint-initdb.d```, donde guardaremos los datos de nuestra aplicación.
 > ```bash
-...
     volumes:
       - mysql_data:/var/lib/mysql
       - ./sql:/docker-entrypoint-initdb.d 
-...
 ```
 
 Crearemos un archivo **.env** para guardar nuestras variables de entorno.
