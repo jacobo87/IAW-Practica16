@@ -111,7 +111,7 @@ volumes:
 
 ## REFERENCIAS
 - [Jacobo Azmani Github](https://github.com/jacobo87/IAW-Practica-PrestaShop-Docker)
-- [José Juan Sanchez](https://josejuansanchez.org/iaw/practica-16/index.html)
+- [José Juan Sánchez](https://josejuansanchez.org/iaw/practica-16/index.html)
 - [Pila LAMP](https://github.com/josejuansanchez/iaw-practica-lamp)
 - [Dockerfile](https://docs.docker.com/engine/reference/builder/)
 - [Docker-compose version](https://docs.docker.com/compose/compose-file/compose-versioning/)
