@@ -21,7 +21,7 @@ Crearemos un archivo ```dockerfile```:
 Utilizaremos la última versión de **MySQL** disponible. Es muy **importante** que para configurar la contraseña de **MySQL** usemos ```--default-authentication-plugin=mysql_native_password```.
 
 Importaremos un script con la base de datos, para ello añadimos un volumen llamado ```./sql:/docker-entrypoint-initdb.d```, donde guardaremos los datos de nuestra aplicación.
-> ```bash
+```bash
     volumes:
       - mysql_data:/var/lib/mysql
       - ./sql:/docker-entrypoint-initdb.d 
