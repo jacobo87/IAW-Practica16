@@ -56,7 +56,7 @@ Crearemos un archivo **.env** para guardar nuestras variables de entorno.
 - El archivo final de ```docker-compose.yml``` quedaría así:
 
 ```
-version: '3.8'
+version: '3.4'
 
 services:
 
